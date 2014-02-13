@@ -1,0 +1,98 @@
+<html>
+<head>
+	<style type="text/css">
+		.container {
+			float: left;
+			margin: 0 auto;
+			padding: 5px;
+			max-width: 960px;
+			width: 90%;
+			border: 2px dashed gray;
+		}
+
+		.column {
+			margin: 5px;
+			padding: 5px;
+			float: left;
+			border: 1px solid black;
+		}
+
+		.column.full {
+			width: 100%;
+		}
+
+		.column.two-thirds {
+			width: 65%;
+		}
+
+		.column.half {
+			width: 45%;
+		}
+
+		.column.one-third {
+			width: 30%;
+		}
+
+		.column.one-fourth {
+			width: 21.25%;
+		}
+
+		.row {
+			overflow: hidden;
+		}
+
+		.result {
+			background-color: rgba(225, 243, 17, 0.29);
+		}
+
+		@media screen and (max-width: 640px) {
+			.column.full,
+			.column.two-thirds,
+			.column.half,
+			.column.one-third,
+			.column.one-fourth {
+				margin: 10px;
+				width: 95%;
+			}
+		}
+	</style>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<script>
+		$(document).ready(function(){
+			var socket = io.connect('http://localhost');
+
+			socket.on('news', function (data) {
+				console.log(data);
+
+				$('#rightcolumn').html('hello: ' + data['hello']).addClass('result');
+			});
+
+			socket.on('connect', function(data) {
+				socket.emit('my other event', { client: 'hello from webclient' });
+				socket.emit('message', { client: 'one two three' });
+			});
+
+		});
+
+	</script>
+	
+	<div class="container">
+		<div class="row">
+			<div id="leftcolumn" class="column half">left</div>
+			<div id="rightcolumn" class="column half">right</div>
+		</div>
+
+
+		<div class="row">
+			<div class="column one-third">1</div>
+			<div class="column one-third">2</div>
+			<div class="column one-third">3</div>
+		</div>
+
+	</div>
+
+</body>
